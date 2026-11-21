@@ -1,1 +1,1130 @@
-Selamat Belajar dan Tetap Semangat
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detektif LHO: Misi Observasi</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #0ea5e9;
+    --primary-dark: #0369a1;
+    --accent: #f59e0b;
+    --green: #22c55e;
+    --red: #ef4444;
+    --dark: #0f172a;
+    --card: #ffffff;
+    --soft: #f1f5f9;
+  }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: radial-gradient(circle at 20% 20%, #1e3a8a 0%, #0f172a 55%, #020617 100%);
+    min-height: 100vh;
+    padding: 16px;
+    color: var(--dark);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .app {
+    max-width: 860px;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--card);
+    border-radius: 24px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+    animation: pop 0.5s ease;
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0.96) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* ====== START SCREEN ====== */
+  #startScreen {
+    padding: 40px 30px 50px;
+    text-align: center;
+    background:
+      radial-gradient(circle at 90% 10%, rgba(245,158,11,0.18) 0%, transparent 40%),
+      radial-gradient(circle at 10% 90%, rgba(14,165,233,0.18) 0%, transparent 45%),
+      #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .mascot {
+    font-size: 4.5em;
+    display: inline-block;
+    animation: floaty 3s ease-in-out infinite;
+    filter: drop-shadow(0 10px 12px rgba(0,0,0,0.15));
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-14px) rotate(3deg); }
+  }
+  .game-title {
+    font-size: 2em;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #0369a1, #0ea5e9 45%, #f59e0b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 12px 0 6px;
+    line-height: 1.15;
+  }
+  .game-subtitle {
+    color: #475569;
+    font-size: 1em;
+    margin-bottom: 26px;
+    line-height: 1.6;
+  }
+  .chip {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 4px 4px;
+  }
+  .name-box {
+    max-width: 420px;
+    margin: 26px auto 18px;
+    text-align: left;
+  }
+  .name-box label {
+    display: block;
+    font-size: 0.85em;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+  }
+  .name-box input {
+    width: 100%;
+    padding: 15px 18px;
+    font-size: 1em;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    outline: none;
+    transition: all 0.25s ease;
+    background: #f8fafc;
+  }
+  .name-box input:focus {
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(14,165,233,0.15);
+  }
+  .btn-start {
+    background: linear-gradient(135deg, #0ea5e9, #0369a1);
+    color: #fff;
+    border: none;
+    padding: 16px 48px;
+    font-size: 1.05em;
+    font-weight: 800;
+    border-radius: 999px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 25px rgba(14,165,233,0.45);
+    transition: all 0.25s ease;
+  }
+  .btn-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(14,165,233,0.55);
+  }
+  .btn-start:active { transform: translateY(0); }
+  .start-note {
+    margin-top: 20px;
+    font-size: 0.8em;
+    color: #94a3b8;
+  }
+
+  /* ====== QUIZ HEADER ====== */
+  #quizScreen { display: none; }
+  .quiz-top {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: #fff;
+    padding: 18px 24px 14px;
+  }
+  .quiz-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .player-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85em;
+    font-weight: 600;
+    background: rgba(255,255,255,0.12);
+    padding: 7px 14px;
+    border-radius: 999px;
+    max-width: 55%;
+  }
+  .player-tag span:first-child { font-size: 1.1em; }
+  .player-tag .pname {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .score-tag {
+    font-size: 0.85em;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    color: #451a03;
+    padding: 7px 16px;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+  }
+  .progress-track {
+    height: 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #22d3ee, #0ea5e9, #f59e0b);
+    border-radius: 999px;
+    transition: width 0.45s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75em;
+    margin-top: 7px;
+    opacity: 0.85;
+  }
+
+  /* ====== QUESTION ====== */
+  .quiz-body { padding: 26px 26px 30px; }
+  .q-num-badge {
+    display: inline-block;
+    background: var(--soft);
+    color: var(--primary-dark);
+    font-size: 0.75em;
+    font-weight: 800;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+    letter-spacing: 0.5px;
+  }
+  .q-category {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.7em;
+    font-weight: 800;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-left: 6px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .q-text {
+    font-size: 1.06em;
+    font-weight: 700;
+    line-height: 1.6;
+    color: #0f172a;
+    margin-bottom: 16px;
+  }
+  .stimulus {
+    background: #f0f9ff;
+    border-left: 5px solid var(--primary);
+    border-radius: 0 14px 14px 0;
+    padding: 16px 20px;
+    margin: 0 0 20px;
+    font-size: 0.94em;
+    line-height: 1.75;
+    color: #1e293b;
+    position: relative;
+  }
+  .stimulus::before {
+    content: "📄 Teks Stimulus";
+    display: block;
+    font-size: 0.72em;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    color: var(--primary-dark);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .stimulus p { margin-bottom: 8px; }
+  .stimulus p:last-child { margin-bottom: 0; }
+  .stimulus ol, .stimulus ul { margin: 6px 0 6px 20px; }
+  .stimulus li { margin-bottom: 4px; }
+
+  .options { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.96em;
+    line-height: 1.5;
+  }
+  .option:hover:not(.locked) {
+    border-color: var(--primary);
+    background: #f0f9ff;
+    transform: translateX(5px);
+  }
+  .option .letter {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    border-radius: 9px;
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85em;
+    color: #64748b;
+    transition: all 0.2s ease;
+  }
+  .option.selected { border-color: var(--primary); background: #e0f2fe; }
+  .option.selected .letter { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .option.correct {
+    border-color: var(--green);
+    background: #dcfce7;
+    animation: pulseGood 0.45s ease;
+  }
+  .option.correct .letter { background: var(--green); border-color: var(--green); color: #fff; }
+  .option.wrong {
+    border-color: var(--red);
+    background: #fee2e2;
+    animation: shake 0.4s ease;
+  }
+  .option.wrong .letter { background: var(--red); border-color: var(--red); color: #fff; }
+  .option.locked { cursor: default; }
+  @keyframes pulseGood {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* ====== EXPLANATION ====== */
+  .explanation {
+    margin-top: 18px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    display: none;
+    font-size: 0.93em;
+    line-height: 1.7;
+    animation: slideDown 0.35s ease;
+  }
+  .explanation.show { display: block; }
+  .explanation.ok { background: #f0fdf4; border: 2px solid #86efac; color: #14532d; }
+  .explanation.no { background: #fef2f2; border: 2px solid #fca5a5; color: #7f1d1d; }
+  .explanation .verdict {
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 7px;
+    font-size: 1.02em;
+  }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ====== NAV ====== */
+  .quiz-nav {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px dashed #e2e8f0;
+  }
+  .btn-next {
+    background: linear-gradient(135deg, #0ea5e9, #0369a1);
+    color: #fff;
+    border: none;
+    padding: 13px 34px;
+    font-size: 0.98em;
+    font-weight: 800;
+    border-radius: 999px;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 18px rgba(14,165,233,0.4);
+    transition: all 0.25s ease;
+    display: none;
+  }
+  .btn-next:hover { transform: translateY(-2px); box-shadow: 0 9px 24px rgba(14,165,233,0.5); }
+  .btn-next.show { display: inline-block; animation: slideDown 0.3s ease; }
+
+  /* ====== RESULT ====== */
+  #resultScreen {
+    display: none;
+    padding: 40px 26px 46px;
+    text-align: center;
+    background:
+      radial-gradient(circle at 80% 0%, rgba(245,158,11,0.15) 0%, transparent 40%),
+      radial-gradient(circle at 0% 100%, rgba(34,197,94,0.15) 0%, transparent 45%),
+      #fff;
+  }
+  .result-emoji { font-size: 5em; animation: floaty 2.6s ease-in-out infinite; }
+  .result-name {
+    font-size: 1.15em;
+    color: #475569;
+    margin: 8px 0 2px;
+  }
+  .result-name strong { color: var(--primary-dark); }
+  .predikat {
+    display: inline-block;
+    font-size: 1.4em;
+    font-weight: 900;
+    letter-spacing: 1px;
+    padding: 8px 30px;
+    border-radius: 999px;
+    margin: 12px 0 22px;
+  }
+  .predikat.excellent { background: #dcfce7; color: #15803d; }
+  .predikat.good { background: #dbeafe; color: #1d4ed8; }
+  .predikat.fair { background: #fef3c7; color: #b45309; }
+  .predikat.poor { background: #fee2e2; color: #b91c1c; }
+  .score-ring {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 22px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: conic-gradient(var(--ring-color, #0ea5e9) 0deg, #e2e8f0 0deg);
+    transition: background 1s ease;
+  }
+  .score-ring::before {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    background: #fff;
+    border-radius: 50%;
+  }
+  .score-ring .num {
+    position: relative;
+    font-size: 3em;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1;
+  }
+  .score-ring .lbl {
+    position: relative;
+    font-size: 0.8em;
+    color: #64748b;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 460px;
+    margin: 0 auto 24px;
+  }
+  .stat {
+    padding: 16px 8px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+  }
+  .stat .num { font-size: 1.7em; font-weight: 900; line-height: 1; }
+  .stat .lbl { font-size: 0.75em; color: #64748b; font-weight: 700; margin-top: 5px; }
+  .stat.ok { border-color: #86efac; background: #f0fdf4; }
+  .stat.ok .num { color: var(--green); }
+  .stat.no { border-color: #fca5a5; background: #fef2f2; }
+  .stat.no .num { color: var(--red); }
+  .stat.score { border-color: #7dd3fc; background: #f0f9ff; }
+  .stat.score .num { color: var(--primary-dark); }
+  .result-msg {
+    max-width: 520px;
+    margin: 0 auto 26px;
+    padding: 16px 22px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 0.95em;
+    line-height: 1.7;
+  }
+  .btn-restart {
+    background: linear-gradient(135deg, #f59e0b, #ea580c);
+    color: #fff;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1em;
+    font-weight: 800;
+    border-radius: 999px;
+    cursor: pointer;
+    letter-spacing: 0.4px;
+    box-shadow: 0 10px 25px rgba(245,158,11,0.45);
+    transition: all 0.25s ease;
+  }
+  .btn-restart:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(245,158,11,0.55); }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 560px) {
+    body { padding: 8px; }
+    .app { border-radius: 18px; }
+    #startScreen { padding: 28px 18px 38px; }
+    .game-title { font-size: 1.55em; }
+    .mascot { font-size: 3.4em; }
+    .quiz-top { padding: 14px 16px 12px; }
+    .quiz-body { padding: 20px 16px 24px; }
+    .q-text { font-size: 1em; }
+    .stimulus { padding: 14px 15px; font-size: 0.9em; }
+    .option { padding: 12px 13px; font-size: 0.92em; gap: 10px; }
+    .stat .num { font-size: 1.4em; }
+    .score-ring { width: 150px; height: 150px; }
+    .score-ring .num { font-size: 2.5em; }
+    .btn-start { padding: 14px 38px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ================= START SCREEN ================= -->
+  <div id="startScreen">
+    <div class="mascot">🔍🧪</div>
+    <h1 class="game-title">DETEKTIF LHO<br>Misi Observasi</h1>
+    <p class="game-subtitle">Jadilah detektif teks! Selidiki laporan hasil observasi, temukan fakta, dan buktikan kemampuanmu!</p>
+    <div>
+      <span class="chip">20 SOAL</span>
+      <span class="chip">PILIHAN GANDA</span>
+      <span class="chip">LEVEL SMA</span>
+    </div>
+    <div class="name-box">
+      <label for="studentName">🕵️ Nama Detektif</label>
+      <input type="text" id="studentName" placeholder="Tulis namamu di sini..." maxlength="40" autocomplete="off">
+    </div>
+    <button class="btn-start" onclick="startQuiz()">🚀 Mulai Misi</button>
+    <p class="start-note">Jawab dengan teliti — setiap jawaban langsung dinilai dan dibahas!</p>
+  </div>
+
+  <!-- ================= QUIZ SCREEN ================= -->
+  <div id="quizScreen">
+    <div class="quiz-top">
+      <div class="quiz-top-row">
+        <div class="player-tag">
+          <span>🕵️</span>
+          <span class="pname" id="playerName">Detektif</span>
+        </div>
+        <div class="score-tag">⭐ Skor: <span id="liveScore">0</span></div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="progress-meta">
+        <span id="progressLabel">Soal 1 dari 20</span>
+        <span id="progressPercent">0%</span>
+      </div>
+    </div>
+
+    <div class="quiz-body">
+      <div>
+        <span class="q-num-badge" id="qNumber">SOAL 1</span>
+        <span class="q-category" id="qCategory">Pemahaman</span>
+      </div>
+      <div id="stimulusBox"></div>
+      <p class="q-text" id="qText"></p>
+      <ul class="options" id="optionsList"></ul>
+      <div class="explanation" id="explanation"></div>
+      <div class="quiz-nav">
+        <button class="btn-next" id="nextBtn" onclick="nextQuestion()">Lanjut ➜</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= RESULT SCREEN ================= -->
+  <div id="resultScreen">
+    <div class="result-emoji" id="resultEmoji">🏆</div>
+    <p class="result-name">Detektif: <strong id="resultName">-</strong></p>
+    <div class="predikat" id="predikat">-</div>
+    <div class="score-ring" id="scoreRing">
+      <div class="num" id="finalScore">0</div>
+      <div class="lbl">SKOR / 100</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat ok">
+        <div class="num" id="correctCount">0</div>
+        <div class="lbl">BENAR</div>
+      </div>
+      <div class="stat no">
+        <div class="num" id="wrongCount">0</div>
+        <div class="lbl">SALAH</div>
+      </div>
+      <div class="stat score">
+        <div class="num" id="totalScore">0</div>
+        <div class="lbl">SKOR</div>
+      </div>
+    </div>
+    <div class="result-msg" id="resultMsg"></div>
+    <button class="btn-restart" onclick="restartQuiz()">🔄 Ulangi Misi</button>
+  </div>
+
+</div>
+
+<script>
+/* ==========================================================
+   DATA SOAL — 20 PILIHAN GANDA MATERI TEKS LHO
+   ========================================================== */
+const questions = [
+  // ---------- 1. PENGERTIAN & TUJUAN ----------
+  {
+    category: "Pemahaman",
+    text: "Teks laporan hasil observasi (LHO) adalah teks yang berisi ....",
+    options: [
+      "cerita imajinatif hasil rekaan penulis tentang suatu objek",
+      "penjelasan objek yang disusun berdasarkan hasil pengamatan langsung dan sistematis",
+      "pendapat pribadi penulis setelah membaca berita di media massa",
+      "langkah-langkah melakukan percobaan ilmiah di laboratorium"
+    ],
+    answer: 1,
+    explanation: "Teks LHO berisi penjelasan atau pemaparan tentang suatu objek yang disusun berdasarkan hasil pengamatan (observasi) langsung dan sistematis, bukan cerita rekaan maupun pendapat pribadi."
+  },
+  {
+    category: "Pemahaman",
+    text: "Tujuan utama penulisan teks laporan hasil observasi adalah ....",
+    options: [
+      "membujuk pembaca agar membeli produk tertentu",
+      "menghibur pembaca dengan kisah yang menarik",
+      "menyampaikan informasi faktual tentang objek hasil pengamatan secara objektif",
+      "menceritakan pengalaman pribadi penulis secara kronologis"
+    ],
+    answer: 2,
+    explanation: "Tujuan utama teks LHO adalah menyampaikan informasi faktual dan objektif tentang objek yang diamati, bukan membujuk (persuasif), menghibur (naratif), atau menceritakan pengalaman pribadi (recount/anehdot)."
+  },
+
+  // ---------- 2. CIRI-CIRI LHO ----------
+  {
+    category: "Pemahaman",
+    text: "Berikut ini yang BUKAN merupakan ciri-ciri teks laporan hasil observasi adalah ....",
+    options: [
+      "bersifat objektif dan didasarkan pada fakta",
+      "menggunakan bahasa baku dan ilmiah",
+      "ditulis secara sistematis dan logis",
+      "banyak mengandung kalimat opini pribadi penulis"
+    ],
+    answer: 3,
+    explanation: "Ciri teks LHO justru harus objektif dan berbasis fakta, bukan berisi opini pribadi. Penggunaan bahasa baku, sistematis, dan logis adalah ciri yang benar."
+  },
+  {
+    category: "Penerapan",
+    text: "Perhatikan pernyataan berikut!\n(1) Berisi hasil pengamatan langsung\n(2) Sering menggunakan kata 'saya rasa' dan 'mungkin'\n(3) Bersifat faktual dan objektif\n(4) Mengandung cerita imajinatif\n\nYang merupakan ciri teks LHO ditunjukkan nomor ....",
+    options: ["(1) dan (3)", "(2) dan (3)", "(1) dan (4)", "(2) dan (4)"],
+    answer: 0,
+    explanation: "Ciri teks LHO: berdasarkan pengamatan langsung (1) serta bersifat faktual dan objektif (3). Kata 'saya rasa/mungkin' menunjukkan opini (bukan LHO), dan cerita imajinatif bukan bagian dari LHO."
+  },
+
+  // ---------- 3. STRUKTUR LHO ----------
+  {
+    category: "Pemahaman",
+    text: "Urutan struktur teks laporan hasil observasi yang tepat adalah ....",
+    options: [
+      "deskripsi bagian – pernyataan umum – deskripsi manfaat",
+      "pernyataan umum – deskripsi bagian – deskripsi manfaat",
+      "deskripsi manfaat – pernyataan umum – deskripsi bagian",
+      "pernyataan umum – deskripsi manfaat – deskripsi bagian"
+    ],
+    answer: 1,
+    explanation: "Struktur teks LHO terdiri atas: (1) pernyataan umum (klasifikasi/pengantar objek), (2) deskripsi bagian (rincian objek), dan (3) deskripsi manfaat (kegunaan objek)."
+  },
+  {
+    category: "Analisis",
+    stimulus: "Kucing merupakan hewan mamalia yang banyak dipelihara manusia. Kucing termasuk dalam keluarga Felidae dan telah didomestikasi sejak ribuan tahun lalu.\n\nKucing memiliki tubuh yang lentur, cakar tajam yang dapat ditarik, serta pendengaran yang sangat peka. Matanya mampu melihat dalam cahaya redup. Bulunya berfungsi menjaga suhu tubuh.\n\nKeberadaan kucing bermanfaat bagi manusia, antara lain sebagai hewan peliharaan yang dapat mengurangi stres dan sebagai pengendali populasi tikus di rumah.",
+    text: "Bagian kutipan \"Kucing merupakan hewan mamalia yang banyak dipelihara manusia. Kucing termasuk dalam keluarga Felidae...\" dalam struktur teks LHO disebut ....",
+    options: [
+      "deskripsi manfaat",
+      "deskripsi bagian",
+      "pernyataan umum",
+      "penutup/reorientasi"
+    ],
+    answer: 2,
+    explanation: "Kutipan tersebut merupakan pernyataan umum karena berisi pengantar/klasifikasi objek (kucing) secara umum sebelum masuk ke rincian bagian. Deskripsi bagian berisi rincian ciri fisik, dan deskripsi manfaat berisi kegunaan."
+  },
+  {
+    category: "Analisis",
+    stimulus: "Kucing merupakan hewan mamalia yang banyak dipelihara manusia. Kucing termasuk dalam keluarga Felidae dan telah didomestikasi sejak ribuan tahun lalu.\n\nKucing memiliki tubuh yang lentur, cakar tajam yang dapat ditarik, serta pendengaran yang sangat peka. Matanya mampu melihat dalam cahaya redup. Bulunya berfungsi menjaga suhu tubuh.\n\nKeberadaan kucing bermanfaat bagi manusia, antara lain sebagai hewan peliharaan yang dapat mengurangi stres dan sebagai pengendali populasi tikus di rumah.",
+    text: "Paragraf terakhir pada teks tersebut merupakan bagian struktur ....",
+    options: [
+      "pernyataan umum",
+      "deskripsi bagian",
+      "deskripsi manfaat",
+      "orientasi"
+    ],
+    answer: 2,
+    explanation: "Paragraf terakhir menjelaskan kegunaan/manfaat kucing bagi manusia (mengurangi stres, pengendali tikus), sehingga termasuk deskripsi manfaat."
+  },
+
+  // ---------- 4. KAIDAH KEBAHASAAN ----------
+  {
+    category: "Pemahaman",
+    text: "Kata kerja yang menyatakan proses pengamatan atau tindakan seperti 'mengamati', 'meneliti', dan 'mengukur' dalam teks LHO disebut ....",
+    options: [
+      "verba relasional",
+      "verba material",
+      "konjungsi",
+      "adverbia"
+    ],
+    answer: 1,
+    explanation: "Verba material adalah kata kerja yang menunjukkan tindakan/proses fisik, seperti mengamati, meneliti, mengukur. Verba relasional menghubungkan (adalah, merupakan), konjungsi adalah kata hubung, dan adverbia adalah kata keterangan."
+  },
+  {
+    category: "Penerapan",
+    text: "Perhatikan kalimat berikut!\n\"Kucing merupakan hewan mamalia yang termasuk dalam keluarga Felidae.\"\n\nKata 'merupakan' dalam kalimat tersebut termasuk ....",
+    options: [
+      "verba material",
+      "verba relasional",
+      "konjungsi temporal",
+      "kata sifat"
+    ],
+    answer: 1,
+    explanation: "Kata 'merupakan' adalah verba relasional, yaitu kata kerja yang menghubungkan subjek dengan penggolongan/identitasnya. Verba ini sangat khas dalam teks LHO."
+  },
+  {
+    category: "Analisis",
+    stimulus: "Terumbu karang adalah ekosistem bawah laut yang terbentuk dari endapan kalsium karbonat. Ekosistem ini menjadi tempat hidup berbagai spesies ikan dan biota laut. Selain itu, terumbu karang berfungsi menahan gelombang laut serta menjadi sumber mata pencaharian bagi nelayan.",
+    text: "Kata 'selain itu' pada teks tersebut berfungsi sebagai ....",
+    options: [
+      "konjungsi antarkalimat yang menambahkan informasi",
+      "verba material yang menyatakan tindakan",
+      "kata sifat yang menerangkan objek",
+      "kalimat definisi"
+    ],
+    answer: 0,
+    explanation: "'Selain itu' merupakan konjungsi antarkalimat yang berfungsi menambahkan informasi baru (manfaat lain). Bukan verba, bukan kata sifat, dan bukan kalimat definisi."
+  },
+
+  // ---------- 5. KALIMAT DEFINISI & DESKRIPSI ----------
+  {
+    category: "Penerapan",
+    text: "Manakah yang merupakan contoh kalimat definisi?",
+    options: [
+      "Terumbu karang tampak indah dengan warna-warni yang memesona.",
+      "Terumbu karang adalah ekosistem bawah laut yang terbentuk dari endapan kalsium karbonat.",
+      "Terumbu karang sangat bermanfaat bagi kehidupan nelayan.",
+      "Terumbu karang di perairan Raja Ampat sangat luas."
+    ],
+    answer: 1,
+    explanation: "Kalimat definisi memakai pola 'adalah/merupakan' untuk menjelaskan pengertian objek secara umum. Pilihan B sesuai pola tersebut. Pilihan lain adalah kalimat deskripsi (menggambarkan ciri/keadaan)."
+  },
+  {
+    category: "Analisis",
+    text: "Perhatikan kalimat berikut!\n(1) \"Gajah adalah mamalia terbesar yang hidup di daratan.\"\n(2) \"Gajah memiliki belalai panjang dan telinga lebar yang membantu mengatur suhu tubuh.\"\n\nJenis kedua kalimat tersebut secara berurutan adalah ....",
+    options: [
+      "kalimat deskripsi – kalimat definisi",
+      "kalimat definisi – kalimat deskripsi",
+      "kalimat opini – kalimat fakta",
+      "kalimat definisi – kalimat opini"
+    ],
+    answer: 1,
+    explanation: "Kalimat (1) memakai pola 'adalah' untuk memberi pengertian → kalimat definisi. Kalimat (2) menggambarkan ciri fisik → kalimat deskripsi."
+  },
+
+  // ---------- 6. FAKTA & OPINI ----------
+  {
+    category: "Analisis",
+    text: "Manakah kalimat yang mengandung OPINI?",
+    options: [
+      "Kucing termasuk dalam keluarga Felidae.",
+      "Terumbu karang terbentuk dari endapan kalsium karbonat.",
+      "Menurut saya, terumbu karang di pantai ini paling indah di Indonesia.",
+      "Gajah memiliki belalai yang panjang."
+    ],
+    answer: 2,
+    explanation: "Kalimat opini berisi pendapat/sudut pandang pribadi, ditandai frasa 'menurut saya' dan penilaian subjektif ('paling indah'). Pilihan lain merupakan fakta yang dapat dibuktikan."
+  },
+  {
+    category: "Analisis",
+    stimulus: "1) Terumbu karang di Indonesia tersebar di sekitar 17.500 pulau. 2) Kerusakan terumbu karang diperkirakan mencapai 30% dalam sepuluh tahun terakhir. 3) Sungguh menyedihkan melihat kerusakan itu. 4) Pemerintah telah menetapkan kawasan konservasi laut di beberapa wilayah.",
+    text: "Kalimat yang mengandung opini pada teks tersebut ditunjukkan nomor ....",
+    options: ["(1)", "(2)", "(3)", "(4)"],
+    answer: 2,
+    explanation: "Kalimat (3) 'Sungguh menyedihkan...' merupakan opini/perasaan subjektif penulis. Kalimat (1), (2), dan (4) berisi data dan fakta yang dapat diverifikasi."
+  },
+
+  // ---------- 7. IDE POKOK & INFORMASI PENTING ----------
+  {
+    category: "Analisis",
+    stimulus: "Lebah madu memiliki peran penting dalam penyerbukan tanaman. Tanpa lebah, banyak tanaman buah dan sayur akan sulit berkembang biak. Lebah juga menghasilkan madu yang bermanfaat bagi kesehatan manusia. Oleh karena itu, keberadaan lebah perlu dilestarikan.",
+    text: "Ide pokok paragraf tersebut adalah ....",
+    options: [
+      "cara lebah menghasilkan madu",
+      "peran penting lebah bagi penyerbukan dan kehidupan manusia",
+      "jenis-jenis tanaman buah dan sayur",
+      "manfaat madu bagi kesehatan"
+    ],
+    answer: 1,
+    explanation: "Ide pokok adalah inti pembicaraan paragraf. Paragraf tersebut membahas peran penting lebah: membantu penyerbukan, menghasilkan madu, dan perlu dilestarikan. Pilihan lain hanya detail pendukung."
+  },
+  {
+    category: "Analisis",
+    stimulus: "Lebah madu memiliki peran penting dalam penyerbukan tanaman. Tanpa lebah, banyak tanaman buah dan sayur akan sulit berkembang biak. Lebah juga menghasilkan madu yang bermanfaat bagi kesehatan manusia. Oleh karena itu, keberadaan lebah perlu dilestarikan.",
+    text: "Informasi penting yang TIDAK terdapat dalam teks tersebut adalah ....",
+    options: [
+      "lebah berperan dalam penyerbukan",
+      "lebah menghasilkan madu",
+      "lebah hidup di hutan tropis",
+      "keberadaan lebah perlu dilestarikan"
+    ],
+    answer: 2,
+    explanation: "Teks tidak menyebutkan bahwa lebah hidup di hutan tropis. Informasi tentang penyerbukan, madu, dan pelestarian lebah semuanya ada dalam teks."
+  },
+
+  // ---------- 8. ANALISIS ISI TEKS LHO (STIMULUS) ----------
+  {
+    category: "HOTS",
+    stimulus: "Mangrove adalah tumbuhan yang hidup di kawasan pesisir dan mampu beradaptasi dengan air asin. Akar mangrove yang berbentuk seperti jangkar berfungsi menahan gelombang dan mencegah abrasi pantai. Selain itu, hutan mangrove menjadi tempat berkembang biak berbagai jenis ikan, udang, dan kepiting. Ekosistem ini juga berperan menyerap karbon dioksida sehingga membantu mengurangi pemanasan global. Namun, alih fungsi lahan mangrove menjadi tambak dan pemukiman terus mengancam keberadaannya.",
+    text: "Simpulan yang paling tepat berdasarkan teks tersebut adalah ....",
+    options: [
+      "Mangrove tidak mampu beradaptasi dengan air asin sehingga mudah mati.",
+      "Mangrove memiliki banyak fungsi ekologis, tetapi keberadaannya terancam alih fungsi lahan.",
+      "Hutan mangrove hanya bermanfaat bagi nelayan pencari ikan.",
+      "Alih fungsi lahan mangrove meningkatkan jumlah mangrove di pesisir."
+    ],
+    answer: 1,
+    explanation: "Teks menjelaskan berbagai fungsi mangrove (menahan gelombang, tempat berkembang biak biota, menyerap CO₂) sekaligus menyebut ancaman alih fungsi lahan. Simpulan yang tepat merangkum kedua hal tersebut."
+  },
+  {
+    category: "HOTS",
+    stimulus: "Mangrove adalah tumbuhan yang hidup di kawasan pesisir dan mampu beradaptasi dengan air asin. Akar mangrove yang berbentuk seperti jangkar berfungsi menahan gelombang dan mencegah abrasi pantai. Selain itu, hutan mangrove menjadi tempat berkembang biak berbagai jenis ikan, udang, dan kepiting. Ekosistem ini juga berperan menyerap karbon dioksida sehingga membantu mengurangi pemanasan global. Namun, alih fungsi lahan mangrove menjadi tambak dan pemukiman terus mengancam keberadaannya.",
+    text: "Pernyataan yang sesuai dengan isi teks tersebut adalah ....",
+    options: [
+      "Akar mangrove berbentuk seperti jangkar untuk menyerap air asin.",
+      "Hutan mangrove menjadi tempat berkembang biak ikan, udang, dan kepiting.",
+      "Mangrove menyerap oksigen untuk mengurangi pemanasan global.",
+      "Alih fungsi lahan mangrove meningkatkan luas hutan mangrove."
+    ],
+    answer: 1,
+    explanation: "Sesuai teks, hutan mangrove menjadi tempat berkembang biak ikan, udang, dan kepiting. Pilihan A salah karena akar jangkar berfungsi menahan gelombang; C salah karena mangrove menyerap karbon dioksida (bukan oksigen); D salah karena alih fungsi justru mengancam."
+  },
+
+  // ---------- SOAL TAMBAHAN ----------
+  {
+    category: "Penerapan",
+    text: "Penulisan kalimat pada teks LHO harus menggunakan ejaan dan bahasa yang ....",
+    options: [
+      "santai dan gaul agar mudah dipahami remaja",
+      "baku dan sesuai kaidah PUEBI",
+      "puitis dan penuh majas",
+      "singkat dan penuh singkatan"
+    ],
+    answer: 1,
+    explanation: "Teks LHO termasuk teks ilmiah sehingga harus menggunakan bahasa baku sesuai kaidah PUEBI, bukan bahasa santai, puitis, atau penuh singkatan."
+  },
+  {
+    category: "HOTS",
+    text: "Perhatikan kalimat berikut!\n\"Bunga bangkai (Amorphophallus titanum) adalah tanaman endemik Sumatra yang terkenal karena ukurannya raksasa.\"\n\nBerdasarkan kalimat tersebut, pernyataan yang tepat adalah ....",
+    options: [
+      "Kalimat tersebut adalah kalimat opini karena menyebut nama ilmiah.",
+      "Kalimat tersebut adalah kalimat definisi yang memberikan pengertian dan ciri khas objek.",
+      "Kalimat tersebut adalah kalimat deskripsi karena menggambarkan warna bunga.",
+      "Kalimat tersebut adalah kalimat perintah."
+    ],
+    answer: 1,
+    explanation: "Kalimat tersebut berpola 'adalah' untuk memberikan pengertian objek (bunga bangkai), disertai ciri khasnya (endemik Sumatra, ukuran raksasa). Ini ciri kalimat definisi. Bukan opini karena faktual, bukan deskripsi warna, dan bukan perintah."
+  },
+  {
+    category: "Pemahaman",
+    text: "Dalam teks LHO, penggunaan istilah teknis dan nama ilmiah bertujuan untuk ....",
+    options: [
+      "membuat teks lebih sulit dipahami pembaca awam",
+      "menunjukkan bahwa penulis tidak menguasai materi",
+      "memberikan ketepatan dan keilmiahan informasi",
+      "menghindari penggunaan bahasa Indonesia"
+    ],
+    answer: 2,
+    explanation: "Istilah teknis dan nama ilmiah digunakan agar informasi dalam teks LHO lebih tepat, akurat, dan bersifat ilmiah."
+  },
+  {
+    category: "Analisis",
+    stimulus: "Sampah plastik merupakan jenis sampah yang paling banyak mencemari laut. Plastik membutuhkan waktu ratusan tahun untuk terurai. Sampah plastik yang hanyut ke laut dapat termakan oleh ikan dan biota laut lainnya. Hal ini membahayakan kesehatan manusia yang mengonsumsi ikan tersebut.",
+    text: "Kalimat utama pada teks tersebut terletak pada ....",
+    options: [
+      "kalimat pertama (awal paragraf)",
+      "kalimat kedua (tengah paragraf)",
+      "kalimat ketiga (tengah paragraf)",
+      "kalimat terakhir (akhir paragraf)"
+    ],
+    answer: 0,
+    explanation: "Paragraf tersebut bersifat deduktif: kalimat utama terletak di awal, yaitu 'Sampah plastik merupakan jenis sampah yang paling banyak mencemari laut,' lalu diikuti kalimat-kalimat penjelas."
+  },
+  {
+    category: "Penerapan",
+    text: "Perhatikan ciri teks berikut!\n(1) Menggunakan kata kerja relasional\n(2) Menggunakan kalimat definisi dan deskripsi\n(3) Menggunakan bahasa konotatif dan majas\n\nCiri kebahasaan yang sesuai dengan teks LHO ditunjukkan nomor ....",
+    options: ["(1) dan (2)", "(2) dan (3)", "(1) dan (3)", "(3) saja"],
+    answer: 0,
+    explanation: "Teks LHO banyak menggunakan verba relasional serta kalimat definisi dan deskripsi. Bahasa konotatif dan majas justru ciri teks sastra (puisi, cerpen), bukan LHO."
+  }
+];
+
+/* Pastikan tepat 20 soal */
+if (questions.length !== 20) {
+  console.warn("Jumlah soal tidak sama dengan 20: ", questions.length);
+}
+
+/* ==========================================================
+   STATE
+   ========================================================== */
+let currentIndex = 0;
+let score = 0;                 // skor 0-100 (dihitung dari jumlah benar)
+let correctCount = 0;
+let wrongCount = 0;
+let answered = false;
+let studentName = "";
+
+const questionIndexList = questions.map((_, i) => i);
+
+/* ==========================================================
+   ELEMEN
+   ========================================================== */
+const startScreen = document.getElementById('startScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+const playerNameEl = document.getElementById('playerName');
+const liveScoreEl = document.getElementById('liveScore');
+const progressFill = document.getElementById('progressFill');
+const progressLabel = document.getElementById('progressLabel');
+const progressPercent = document.getElementById('progressPercent');
+const qNumber = document.getElementById('qNumber');
+const qCategory = document.getElementById('qCategory');
+const stimulusBox = document.getElementById('stimulusBox');
+const qText = document.getElementById('qText');
+const optionsList = document.getElementById('optionsList');
+const explanation = document.getElementById('explanation');
+const nextBtn = document.getElementById('nextBtn');
+
+/* ==========================================================
+   MULAI KUIS
+   ========================================================== */
+function startQuiz() {
+  const input = document.getElementById('studentName');
+  studentName = input.value.trim();
+  if (studentName === "") {
+    input.focus();
+    input.style.borderColor = '#ef4444';
+    input.style.animation = 'shake 0.4s ease';
+    setTimeout(() => { input.style.animation = ''; input.style.borderColor = '#cbd5e1'; }, 500);
+    return;
+  }
+  playerNameEl.textContent = studentName;
+  startScreen.style.display = 'none';
+  quizScreen.style.display = 'block';
+  currentIndex = 0;
+  score = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  updateScoreUI();
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ==========================================================
+   RENDER SOAL
+   ========================================================== */
+function renderQuestion() {
+  answered = false;
+  const q = questions[currentIndex];
+
+  qNumber.textContent = "SOAL " + (currentIndex + 1);
+  qCategory.textContent = q.category;
+  qText.textContent = q.text;
+
+  // Stimulus
+  if (q.stimulus) {
+    const paras = q.stimulus.split('\n\n').map(p => `<p>${p}</p>`).join('');
+    stimulusBox.innerHTML = `<div class="stimulus">${paras}</div>`;
+  } else {
+    stimulusBox.innerHTML = '';
+  }
+
+  // Options
+  optionsList.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const li = document.createElement('li');
+    li.className = 'option';
+    li.dataset.index = i;
+    li.innerHTML = `<span class="letter">${letters[i]}</span><span>${opt}</span>`;
+    li.addEventListener('click', () => selectAnswer(i, li));
+    optionsList.appendChild(li);
+  });
+
+  // Reset explanation
+  explanation.className = 'explanation';
+  explanation.innerHTML = '';
+  nextBtn.className = 'btn-next';
+  nextBtn.textContent = (currentIndex === questions.length - 1) ? 'Lihat Hasil 🏁' : 'Lanjut ➜';
+
+  updateProgressUI();
+}
+
+/* ==========================================================
+   PILIH JAWABAN
+   ========================================================== */
+function selectAnswer(selectedIdx, selectedLi) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[currentIndex];
+  const correctIdx = q.answer;
+  const allOptions = optionsList.querySelectorAll('.option');
+
+  allOptions.forEach(li => {
+    li.classList.add('locked');
+    const idx = parseInt(li.dataset.index);
+    if (idx === correctIdx) {
+      li.classList.add('correct');
+    }
+    if (idx === selectedIdx && selectedIdx !== correctIdx) {
+      li.classList.add('wrong');
+    }
+  });
+
+  const isCorrect = (selectedIdx === correctIdx);
+  if (isCorrect) {
+    correctCount++;
+    score = Math.round((correctCount / questions.length) * 100);
+    explanation.className = 'explanation show ok';
+    explanation.innerHTML = `<div class="verdict">✅ Jawaban Benar!</div>${q.explanation}`;
+  } else {
+    wrongCount++;
+    explanation.className = 'explanation show no';
+    explanation.innerHTML = `<div class="verdict">❌ Jawaban Kurang Tepat</div>
+      Jawaban yang benar adalah <strong>${['A','B','C','D'][correctIdx]}</strong>. ${q.explanation}`;
+  }
+
+  updateScoreUI();
+  nextBtn.classList.add('show');
+  nextBtn.focus({ preventScroll: true });
+}
+
+/* ==========================================================
+   LANJUT / SELESAI
+   ========================================================== */
+function nextQuestion() {
+  if (currentIndex < questions.length - 1) {
+    currentIndex++;
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    showResult();
+  }
+}
+
+/* ==========================================================
+   UI UPDATE
+   ========================================================== */
+function updateScoreUI() {
+  liveScoreEl.textContent = score;
+}
+
+function updateProgressUI() {
+  const total = questions.length;
+  const pct = Math.round(((currentIndex) / total) * 100);
+  progressFill.style.width = pct + '%';
+  progressLabel.textContent = `Soal ${currentIndex + 1} dari ${total}`;
+  progressPercent.textContent = pct + '%';
+}
+
+/* ==========================================================
+   HASIL AKHIR
+   ========================================================== */
+function showResult() {
+  quizScreen.style.display = 'none';
+  resultScreen.style.display = 'block';
+
+  // Skor akhir = persentase benar
+  const finalScore = Math.round((correctCount / questions.length) * 100);
+
+  document.getElementById('resultName').textContent = studentName;
+  document.getElementById('finalScore').textContent = finalScore;
+  document.getElementById('correctCount').textContent = correctCount;
+  document.getElementById('wrongCount').textContent = wrongCount;
+  document.getElementById('totalScore').textContent = finalScore;
+
+  // Ring warna
+  const ring = document.getElementById('scoreRing');
+  let color = '#0ea5e9';
+  if (finalScore >= 85) color = '#22c55e';
+  else if (finalScore >= 70) color = '#0ea5e9';
+  else if (finalScore >= 55) color = '#f59e0b';
+  else color = '#ef4444';
+  const deg = (finalScore / 100) * 360;
+  ring.style.background = `conic-gradient(${color} ${deg}deg, #e2e8f0 0deg)`;
+
+  // Predikat
+  const predikatEl = document.getElementById('predikat');
+  const emojiEl = document.getElementById('resultEmoji');
+  const msgEl = document.getElementById('resultMsg');
+
+  let predikat, cls, emoji, msg;
+  if (finalScore >= 85) {
+    predikat = 'SANGAT BAIK'; cls = 'excellent'; emoji = '🏆';
+    msg = 'Luar biasa! Kamu berhasil menjadi Detektif LHO yang teliti. Pemahamanmu tentang pengertian, struktur, kaidah kebahasaan, serta analisis teks LHO sangat baik. Pertahankan!';
+  } else if (finalScore >= 70) {
+    predikat = 'BAIK'; cls = 'good'; emoji = '🌟';
+    msg = 'Kerja bagus! Sebagian besar materi LHO sudah kamu kuasai. Pelajari kembali bagian yang masih keliru agar kemampuan analisismu semakin tajam.';
+  } else if (finalScore >= 55) {
+    predikat = 'CUKUP'; cls = 'fair'; emoji = '👍';
+    msg = 'Cukup baik! Pemahamanmu tentang teks LHO sudah ada, tetapi masih perlu ditingkatkan, terutama pada analisis isi teks, fakta-opini, dan kaidah kebahasaan.';
+  } else {
+    predikat = 'PERLU BELAJAR LAGI'; cls = 'poor'; emoji = '📚';
+    msg = 'Jangan menyerah, Detektif! Pelajari kembali materi teks Laporan Hasil Observasi: pengertian, struktur, kaidah kebahasaan, kalimat definisi-deskripsi, serta fakta dan opini. Ulangi misi ini setelah belajar!';
+  }
+
+  predikatEl.textContent = predikat;
+  predikatEl.className = 'predikat ' + cls;
+  emojiEl.textContent = emoji;
+  msgEl.textContent = msg;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ==========================================================
+   ULANGI
+   ========================================================== */
+function restartQuiz() {
+  resultScreen.style.display = 'none';
+  startScreen.style.display = 'block';
+  document.getElementById('studentName').value = '';
+  currentIndex = 0;
+  score = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  answered = false;
+  liveScoreEl.textContent = '0';
+  progressFill.style.width = '0%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ==========================================================
+   ENTER UNTUK MULAI
+   ========================================================== */
+document.getElementById('studentName').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') startQuiz();
+});
+</script>
+</body>
+</html>
